@@ -1,0 +1,132 @@
+html,
+body {
+  height: 100%;
+}
+
+.wrapper {
+  overflow: hidden;
+  min-width: 1440px;
+  position: relative;
+}
+
+body {
+  color: var(--black);
+  background: url('./bg.jpg') center center / 250px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.hero {
+  height: auto;
+  min-height: 650px;
+  position: relative;
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+}
+
+.hero:nth-child(1) {
+  align-items: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 45px;
+  width: 400px;
+
+  background-color: whitesmoke;
+}
+
+.form__title {
+  font-size: 25px;
+  color: tomato;
+}
+
+.form__select {
+  display: flex;
+  justify-content: space-between;
+  margin: 30px 0 190px 0;
+  width: 100%;
+}
+
+.select {
+  display: block;
+  width: 100%;
+  max-width: 120px;
+  position: relative;
+}
+
+.new-select {
+  position: relative;
+  border: 1px solid #ced4da;
+  padding: 10px 15px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.new-select__list {
+  position: absolute;
+  top: 45px;
+  left: 0;
+  border: 1px solid #ced4da;
+  cursor: pointer;
+  width: 100%;
+  z-index: 2;
+  background: #fff;
+  user-select: none;
+}
+
+.new-select__list.on {
+  display: block;
+}
+
+.new-select__item span {
+  display: block;
+  padding: 10px 15px;
+}
+
+.new-select__item span:hover {
+  color: #12b223;
+}
+
+.new-select:after {
+  content: '';
+  display: block;
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  right: 9px;
+  top: 9px;
+  background: url('path-to-image') no-repeat right center / cover;
+  opacity: 0.6;
+
+  -webkit-transition: all .27s ease-in-out;
+  -o-transition: all .27s ease-in-out;
+  transition: all .27s ease-in-out;
+
+  -webkit-transform: rotate(0deg);
+  -ms-transform: rotate(0deg);
+  -o-transform: rotate(0deg);
+  transform: rotate(0deg);
+}
+
+.new-select.on:after {
+  -webkit-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+
+.form__button {
+  width: 100%;
+  color: #12b223;
+  background-color: whitesmoke;
+  padding: 10px 0;
+  margin: 0 15px;
+}
+
+.form__button:hover {
+  background-color: rgb(130, 204, 116);
+}
