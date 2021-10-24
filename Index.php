@@ -1,11 +1,6 @@
 <?php
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-	print_r($_POST);
-	echo 'YES';
-	// echo '<h2>'.$_POST.'</h2>';
-} else {
-	echo 'No';
-}
+require_once 'DB.php';
+require_once 'functions.php';
 ?>
 
 
@@ -17,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>Pizza</title>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> -->
 	<link rel="shortcut icon" href="./pizza.png" type="image/png" />
 	<link rel="stylesheet" href="./main.css" />
 </head>
@@ -25,29 +20,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 	<div class="wrapper">
 		<section class="hero">
-			<form action="" method="POST" class="form">
+			<form action="functions.php" method="POST" class="form">
 				<div class="form__title">Заказ пиццы</div>
 				<div class="form__select">
-					<select class="select" name="Pizza">
-						<option value="" disabled>Пиццы:</option>
-						<option value="1">Пепперони</option>
-						<option value="2">Деревенская</option>
-						<option value="3">Гавайская</option>
-						<option value="4">Грибная</option>
+					<select class="select" name="IDType">
+						<option disabled>Пиццы:</option>
+						<?php
+						$arrType = getArray($connect, 'SELECT IDType, NameType FROM Type');
+						foreach ($arrType as $Type) {
+							echo "<option value='{$Type['IDType']}'>{$Type['NameType']}</option>";
+						}
+						?>
 					</select>
-					<select class="select" name="Size">
-						<option value="" disabled>Размер:</option>
-						<option value="1">21</option>
-						<option value="2">26</option>
-						<option value="3">31</option>
-						<option value="4">45</option>
+					<select class="select" name="IDSize">
+						<option disabled>Размер:</option>
+						<?php
+						$arrSize = getArray($connect, 'SELECT IDSize, Dimension FROM Size');
+						foreach ($arrSize as $Size) {
+							echo "<option value='{$Size['IDSize']}'>{$Size['Dimension']}</option>";
+						}
+						?>
 					</select>
-					<select class="select" name="Sous">
-						<option value="" disabled>Соусы:</option>
-						<option value="1">Сырный</option>
-						<option value="2">Кисло-сладкий</option>
-						<option value="3">Чесночный</option>
-						<option value="4">Барбекю</option>
+					<select class="select" name="IDSouse">
+						<option disabled>Соусы:</option>
+						<?php
+						$arrSouse = getArray($connect, 'SELECT IDSouse, NameSouse FROM Souse');
+						foreach ($arrSouse as $Souse) {
+							echo "<option value='{$Souse['IDSouse']}'>{$Souse['NameSouse']}</option>";
+						}
+						?>
 					</select>
 				</div>
 				<button class="form__button">Order</button>
