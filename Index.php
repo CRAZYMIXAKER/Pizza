@@ -1,3 +1,15 @@
+<?php
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+	print_r($_POST);
+	echo 'YES';
+	// echo '<h2>'.$_POST.'</h2>';
+} else {
+	echo 'No';
+}
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="ru">
 
@@ -16,26 +28,26 @@
 			<form action="" method="POST" class="form">
 				<div class="form__title">Заказ пиццы</div>
 				<div class="form__select">
-					<select class="select" name="language">
+					<select class="select" name="Pizza">
 						<option value="" disabled>Пиццы:</option>
-						<option value="">Пепперони</option>
-						<option value="">Деревенская</option>
-						<option value="">Гавайская</option>
-						<option value="">Грибная</option>
+						<option value="1">Пепперони</option>
+						<option value="2">Деревенская</option>
+						<option value="3">Гавайская</option>
+						<option value="4">Грибная</option>
 					</select>
-					<select class="select" name="language">
+					<select class="select" name="Size">
 						<option value="" disabled>Размер:</option>
-						<option value="">21</option>
-						<option value="">26</option>
-						<option value="">31</option>
-						<option value="">45</option>
+						<option value="1">21</option>
+						<option value="2">26</option>
+						<option value="3">31</option>
+						<option value="4">45</option>
 					</select>
-					<select class="select" name="language">
+					<select class="select" name="Sous">
 						<option value="" disabled>Соусы:</option>
-						<option value="">Сырный</option>
-						<option value="">Кисло-сладкий</option>
-						<option value="">Чесночный</option>
-						<option value="">Барбекю</option>
+						<option value="1">Сырный</option>
+						<option value="2">Кисло-сладкий</option>
+						<option value="3">Чесночный</option>
+						<option value="4">Барбекю</option>
 					</select>
 				</div>
 				<button class="form__button">Order</button>
