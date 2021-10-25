@@ -1,47 +1,71 @@
 <?php
-require_once('DB.php');
 session_start();
+require_once('DB.php');
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+class pizza
+{
+	public $connect;
 
-	$_SESSION['IDSize'] = $_POST['IDSize'];
-	$_SESSION['IDSouse'] = $_POST['IDSouse'];
-	$_SESSION['IDType'] = $_POST['IDType'];
+	public function __construct($connect)
+	{
+		$this->connect = $connect;
+		// $this->dom = $this->workWithXPATH();
+		// $this->xpath = new DOMXPath($this->dom);
+		// $this->xml = simplexml_load_file("db.xml");
+	}
 
-	function getSingleValue($con, $sql)
+	public function getPrice()
+	{
+		$sqlSizePrice = "SELECT Price FROM Size WHERE IDSize = {$_POST['IDSize']}";
+		$SizePrice = $this->getSingleValue($this->connect, $sqlSizePrice);
+
+		$sqlSousePrice = "SELECT Price FROM Souse WHERE IDSouse = {$_POST['IDSouse']}";
+		$SousePrice = $this->getSingleValue($this->connect, $sqlSousePrice);
+
+		$sqlTypePrice = "SELECT Price FROM Type WHERE IDType = {$_POST['IDType']}";
+		$TypePrice = $this->getSingleValue($this->connect, $sqlTypePrice);
+
+		$price = $SizePrice + $SousePrice + $TypePrice;
+
+		$_SESSION['Pizza'] = [
+			'IDSize' => $_POST['IDSize'],
+			'IDSouse' => $_POST['IDSouse'],
+			'IDType' => $_POST['IDType'],
+			'Price' => $price
+		];
+	}
+
+	public function addPizza()
+	{
+		$sql = "INSERT Pizza (Id_Size, Id_Souse, Id_Type, Price) VALUES (:size, :souse, :type , :price)";
+		$query = $this->connect->prepare($sql);
+
+		$query->bindParam(':size', $_POST['IDSize']);
+		$query->bindParam(':souse', $_POST['IDSouse']);
+		$query->bindParam(':type', $_POST['IDType']);
+		$query->bindParam(':price', $_SESSION['Pizza']['Price']);
+		$query->execute();
+	}
+
+	public function getSingleValue($con, $sql)
 	{
 		$query = $con->prepare($sql);
 		$query->execute();
 		return $query->fetchColumn();
 	}
 
-	$sqlSizePrice = "SELECT Price FROM Size WHERE IDSize = {$_POST['IDSize']}";
-	$SizePrice = getSingleValue($connect, $sqlSizePrice);
-
-	$sqlSousePrice = "SELECT Price FROM Souse WHERE IDSouse = {$_POST['IDSouse']}";
-	$SousePrice = getSingleValue($connect, $sqlSousePrice);
-
-	$sqlTypePrice = "SELECT Price FROM Type WHERE IDType = {$_POST['IDType']}";
-	$TypePrice = getSingleValue($connect, $sqlTypePrice);
-
-	$price = $SizePrice + $SousePrice + $TypePrice;
-
-	$sql = "INSERT Pizza (Id_Size, Id_Souse, Id_Type, Price) VALUES (:size, :souse, :type , :price)";
-	$query = $connect->prepare($sql);
-
-	$query->bindParam(':size', $_POST['IDSize']);
-	$query->bindParam(':souse', $_POST['IDSouse']);
-	$query->bindParam(':type', $_POST['IDType']);
-	$query->bindParam(':price', $price);
-	$query->execute();
-
-	header('Location: check.php');
-} else {
+	public function getArray($sql)
+	{
+		$query = $this->connect->prepare($sql);
+		$query->execute();
+		return $query->fetchAll();
+	}
 }
 
-function getArray($connect, $sql)
-{
-	$query = $connect->prepare($sql);
-	$query->execute();
-	return $query->fetchAll();
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+	$pizza = new pizza($connect);
+	$pizza->getPrice();
+} elseif (isset($_GET['OneMore'])) {
+	unset($_SESSION['Pizza']);
+	header('Location: index.php');
 }
