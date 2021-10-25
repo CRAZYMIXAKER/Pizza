@@ -9,9 +9,18 @@ class pizza
 	public function __construct($connect)
 	{
 		$this->connect = $connect;
-		// $this->dom = $this->workWithXPATH();
-		// $this->xpath = new DOMXPath($this->dom);
-		// $this->xml = simplexml_load_file("db.xml");
+	}
+
+	public function addPizza()
+	{
+		$sql = "INSERT Pizza (Id_Size, Id_Souse, Id_Type, Price) VALUES (:size, :souse, :type , :price)";
+		$query = $this->connect->prepare($sql);
+
+		$query->bindParam(':size', $_POST['IDSize']);
+		$query->bindParam(':souse', $_POST['IDSouse']);
+		$query->bindParam(':type', $_POST['IDType']);
+		$query->bindParam(':price', $_SESSION['Pizza']['Price']);
+		$query->execute();
 	}
 
 	public function getPrice()
@@ -31,20 +40,26 @@ class pizza
 			'IDSize' => $_POST['IDSize'],
 			'IDSouse' => $_POST['IDSouse'],
 			'IDType' => $_POST['IDType'],
-			'Price' => $price
+			'Price' => $price,
 		];
+
+		$this->addPizza();
 	}
 
-	public function addPizza()
+	public function getPizza()
 	{
-		$sql = "INSERT Pizza (Id_Size, Id_Souse, Id_Type, Price) VALUES (:size, :souse, :type , :price)";
-		$query = $this->connect->prepare($sql);
+		$sqlSize = "SELECT Dimension FROM Size WHERE IDSize = {$_POST['IDSize']}";
+		$Size = $this->getSingleValue($this->connect, $sqlSize);
 
-		$query->bindParam(':size', $_POST['IDSize']);
-		$query->bindParam(':souse', $_POST['IDSouse']);
-		$query->bindParam(':type', $_POST['IDType']);
-		$query->bindParam(':price', $_SESSION['Pizza']['Price']);
-		$query->execute();
+		$sqlSouse = "SELECT NameSouse FROM Souse WHERE IDSouse = {$_POST['IDSouse']}";
+		$Souse = $this->getSingleValue($this->connect, $sqlSouse);
+
+		$sqlType = "SELECT NameType FROM Type WHERE IDType = {$_POST['IDType']}";
+		$Type = $this->getSingleValue($this->connect, $sqlType);
+
+		$_SESSION['Pizza']['Size'] = $Size;
+		$_SESSION['Pizza']['Souse'] = $Souse;
+		$_SESSION['Pizza']['Type'] = $Type;
 	}
 
 	public function getSingleValue($con, $sql)
@@ -65,6 +80,7 @@ class pizza
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$pizza = new pizza($connect);
 	$pizza->getPrice();
+	$pizza->getPizza();
 } elseif (isset($_GET['OneMore'])) {
 	unset($_SESSION['Pizza']);
 	header('Location: index.php');

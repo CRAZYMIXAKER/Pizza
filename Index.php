@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once 'DB.php';
-require_once 'functions.php';
+require_once 'functional.php';
 $pizza = new pizza($connect);
 ?>
 
@@ -52,25 +52,20 @@ $pizza = new pizza($connect);
 							?>
 					</select>
 				</div>
-				<button class="form__button" type="submit">Order</button>
+				<button class="form__button" type="submit">Заказать</button>
 			</form>
-			<div id="my_message"></div>
+			<div id="message"></div>
 		</section>
+
 		<? elseif (isset($_POST)) : ?>
-		Вы заказали пиццу из следующих состовляющих:
-		<div>Пицца:
-			<?= $_SESSION['Pizza']['IDType'] ?>
-		</div>
-		<div>Размер:
-			<?= $_SESSION['Pizza']['IDSize'] ?> см
-		</div>
-		<div>Соус:
-			<?= $_SESSION['Pizza']['IDSouse'] ?>
-		</div>
-		<div>Цена:
-			<?= $_SESSION['Pizza']['Price'] ?>
-		</div>
-		<a href="functions.php?OneMore" id="one_More">Заказать еще одну пиццу</a>
+		<section class="check">
+			<div class="check__title"> Вы заказали пиццу из следующих состовляющих: </div>
+			<div class="check__description">Пицца: <?= $_SESSION['Pizza']['Type'] ?> </div>
+			<div class="check__description">Размер: <?= $_SESSION['Pizza']['Size'] ?> см </div>
+			<div class="check__description">Соус: <?= $_SESSION['Pizza']['Souse'] ?> </div>
+			<div class="check__description">Цена: <?= $_SESSION['Pizza']['Price'] ?> </div>
+			<a class="check__oneMore" href="functional.php?OneMore" id="one_More">Заказать еще одну пиццу</a>
+		</section>
 		<?php endif; ?>
 	</div>
 
